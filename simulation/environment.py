@@ -170,6 +170,7 @@ class RoadDatabase:
 
         Returns risk score 0-10 (10 = most dangerous)
         """
+
         road = RoadDatabase.get_road_info(road_name)
         base_risk = road["base_risk"]
 
@@ -245,20 +246,6 @@ class RoadDatabase:
 
         return factors
 
-    # route connectivity
-    ROADS = {
-        "NH-44": {
-            "name": "National Highway 44",
-            "connects_to": ["NH-163", "ORR"],  # ✅ Which roads intersect?
-            "base_risk": 6.5,
-        },
-        "NH-163": {
-            "name": "National Highway 163",
-            "connects_to": ["NH-44", "SH-18"],  # Only these are reachable
-            "base_risk": 5.5,
-        },
-    }
-
     @staticmethod
     def find_alternative_route(current_road: str, weather: str) -> Dict:
         """Find safer alternative route"""
@@ -269,7 +256,7 @@ class RoadDatabase:
         alternatives = []
         for road_name in RoadDatabase.ROADS.keys():
             if road_name != current_road:
-                risk_data = RoadDatabase.calculate_risk_score(road_name, weather)
+                risk_data = RoadDatabase.calculate_risk_score(road_name, weather, "day")
                 alternatives.append(
                     {
                         "road": road_name,
