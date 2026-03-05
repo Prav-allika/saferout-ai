@@ -1,4 +1,4 @@
-# 🚗 SafeRoute AI - Multi-Agent Vehicle Safety Monitoring System
+#  SafeRoute AI - Multi-Agent Vehicle Safety Monitoring System
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![ML](https://img.shields.io/badge/ML-Random%20Forest-green.svg)](https://scikit-learn.org/)
@@ -7,22 +7,22 @@
 
 An intelligent multi-agent AI system that predicts vehicle failures, analyzes route safety, and executes automated emergency protocols using machine learning and real-time sensor simulation.
 
-## 🎯 Project Overview
+##  Project Overview
 
 SafeRoute AI is a production-grade vehicle safety monitoring system built with **Python, Machine Learning, and Multi-Agent Architecture**. The system analyzes real-time sensor data (tire pressure, engine temperature, road conditions, weather) to predict failures **before they happen** and automatically execute emergency protocols.
 
 ### ⚡ Key Highlights
 
-- **🤖 3 Specialized AI Agents** coordinated by a master orchestrator
-- **🧠 ML-Powered Predictions** using Random Forest (99.8% accuracy)
-- **⚡ Real-Time Analysis** processing sensor data every 5 seconds
-- **🚨 Automated Emergency Response** with multi-step protocols
-- **🗺️ Dynamic Route Risk Analysis** combining weather + road conditions
-- **📊 Interactive Dashboard** built with Streamlit
+- ** 3 Specialized AI Agents** coordinated by a master orchestrator
+- ** ML-Powered Predictions** using Random Forest (99.8% accuracy)
+- ** Real-Time Analysis** processing sensor data every 5 seconds
+- ** Automated Emergency Response** with multi-step protocols
+- ** Dynamic Route Risk Analysis** combining weather + road conditions
+- ** Interactive Dashboard** built with Streamlit
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -48,28 +48,28 @@ SafeRoute AI is a production-grade vehicle safety monitoring system built with *
 
 ## 🚀 Features
 
-### 1️⃣ **Tire Failure Predictor Agent**
+### 1️ **Tire Failure Predictor Agent**
 - Random Forest ML model trained on 10,000 synthetic examples
 - Predicts tire failures up to 48 hours in advance
 - 99.8% training accuracy
 - Features: pressure, temperature, age, rotation history, mileage
 - Real-time probability scoring with confidence levels
 
-### 2️⃣ **Emergency Responder Agent**
+### 2️ **Emergency Responder Agent**
 - Automated emergency protocols based on severity
 - **Tire Critical Protocol:** SMS driver → Call garage → Notify manager → Log event → Disable vehicle start (5 automated actions)
 - **Engine Critical Protocol:** Emergency stop instructions → Dispatch tow truck → Notify passengers
 - **Multi-Failure Protocol:** Escalated response for cascading failures
 - Priority system: IMMEDIATE > CRITICAL > HIGH > MEDIUM
 
-### 3️⃣ **Route Analyzer Agent**
+### 3️ **Route Analyzer Agent**
 - Combines weather simulation + road accident database
 - Dynamic risk calculation: `base_risk × weather_multiplier × time_multiplier`
 - Evidence-based multipliers (NHTSA research: rain = 1.8×, night = 1.3×)
 - Suggests alternative routes with risk reduction estimates
 - Tracks accident history (6-month rolling data)
 
-### 4️⃣ **Orchestrator (Master AI)**
+### 4️ **Orchestrator (Master AI)**
 - Coordinates all 3 specialized agents
 - Multi-source analysis (tires + engine + route)
 - Risk-based intelligent routing
@@ -78,44 +78,44 @@ SafeRoute AI is a production-grade vehicle safety monitoring system built with *
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 saferout-ai/
-├── agents/                      # 🤖 Specialized AI Agents
+├── agents/                      #  Specialized AI Agents
 │   ├── orchestrator.py          # Master controller (280 lines)
 │   ├── tire_predictor.py        # ML predictions (78 lines)
 │   ├── emergency_responder.py   # Emergency protocols (229 lines)
 │   └── route_analyzer.py        # Route safety (144 lines)
 │
-├── models/                      # 🧠 Machine Learning
+├── models/                      #  Machine Learning
 │   └── tire_failure_model.py    # Random Forest classifier (192 lines)
 │
-├── simulation/                  # 🎮 Data Simulation
+├── simulation/                  # Data Simulation
 │   ├── sensors.py               # IoT sensor simulation (158 lines)
 │   └── environment.py           # Weather + road database (263 lines)
 │
-├── config/                      # ⚙️ Configuration
+├── config/                      #  Configuration
 │   └── settings.py              # Central settings (45 lines)
 │
-├── utils/                       # 🛠️ Utilities
+├── utils/                       #  Utilities
 │   ├── logger.py                # Production logging (158 lines)
 │   ├── data_processor.py        # Data validation
 │   └── monitoring.py            # Performance tracking
 │
-├── ui/                          # 🎨 User Interface
+├── ui/                          # User Interface
 │   └── dashboard.py             # Streamlit dashboard
 │
-├── main.py                      # 🚀 Entry point
-├── requirements.txt             # 📦 Dependencies
-└── README.md                    # 📖 Documentation
+├── main.py                      # Entry point
+├── requirements.txt             #  Dependencies
+└── README.md                    #  Documentation
 ```
 
 **Total:** ~2,000 lines of production-quality Python code
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 ### **Core Technologies**
 - **Python 3.8+** - Primary language
@@ -157,13 +157,13 @@ python quick_test.py
 
 Expected output:
 ```
-🚀 Testing SafeRoute AI System...
-✅ All imports successful!
-✅ Orchestrator created successfully!
-✅ Vehicle created! ID: TEST-123
-✅ Analysis complete!
-✅ ML model works!
-🎉 ALL TESTS PASSED!
+ Testing SafeRoute AI System...
+ All imports successful!
+ Orchestrator created successfully!
+ Vehicle created! ID: TEST-123
+ Analysis complete!
+ ML model works!
+ ALL TESTS PASSED!
 ```
 
 ### **4. Run Dashboard**
@@ -175,7 +175,7 @@ Dashboard opens at `http://localhost:8501`
 
 ---
 
-## 📊 Demo & Screenshots
+##  Demo & Screenshots
 
 ### **Real-Time Monitoring**
 - Live sensor data from 4 tire sensors + engine
@@ -199,7 +199,7 @@ Dashboard opens at `http://localhost:8501`
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 Run comprehensive tests:
 ```bash
@@ -207,16 +207,16 @@ python quick_test.py
 ```
 
 Tests cover:
-- ✅ Import validation
-- ✅ Orchestrator initialization
-- ✅ Vehicle simulation
-- ✅ Sensor data analysis
-- ✅ ML model predictions
-- ✅ Agent coordination
+-  Import validation
+-  Orchestrator initialization
+-  Vehicle simulation
+-  Sensor data analysis
+-  ML model predictions
+-  Agent coordination
 
 ---
 
-## 📈 Performance Metrics
+##  Performance Metrics
 
 | Metric | Value |
 |--------|-------|
@@ -229,7 +229,7 @@ Tests cover:
 
 ---
 
-## 🎓 Technical Highlights (Resume-Ready)
+##  Technical Highlights (Resume-Ready)
 
 ### **Machine Learning**
 - Designed and trained Random Forest classifier with 100 estimators
@@ -257,7 +257,7 @@ Tests cover:
 
 ---
 
-## 🚀 Future Enhancements
+##  Future Enhancements
 
 ### **Planned Features**
 - [ ] Real hardware integration (OBD-II adapters, TPMS)
@@ -273,7 +273,7 @@ Tests cover:
 
 ---
 
-## 📝 Project Decisions & Rationale
+##  Project Decisions & Rationale
 
 ### **Why Simulation Instead of Real Hardware?**
 - **Demo Reliability:** Works offline, no API failures during interviews
@@ -298,23 +298,23 @@ Tests cover:
 
 ---
 
-## 👩‍💻 Author
+##  Author
 
 **Pravalli** - ML Engineer  
-- 📧 Email: [Your Email]
-- 💼 LinkedIn: [Your LinkedIn]
-- 🌐 Portfolio: [Your Portfolio]
-- 📍 Location: Hyderabad, India
+-  Email: pravallipasala@gmail.com
+-  LinkedIn: https://github.com/Prav-allika
+-  Portfolio: [Your Portfolio]
+-  Location: Hyderabad, India
 
 ---
 
-## 📜 License
+##  License
 
 This project is open source and available under the MIT License.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **ML Model Training:** scikit-learn community
 - **Risk Multipliers:** NHTSA and WHO road safety research
@@ -323,7 +323,7 @@ This project is open source and available under the MIT License.
 
 ---
 
-## 📞 Contact & Collaboration
+##  Contact & Collaboration
 
 Interested in this project? Have questions? Want to collaborate?
 
@@ -333,6 +333,6 @@ Interested in this project? Have questions? Want to collaborate?
 
 ---
 
-**⭐ If you found this project helpful, please give it a star!**
+** If you found this project helpful, please give it a star!**
 
-**📌 Keywords:** Python, Machine Learning, AI, Multi-Agent Systems, IoT, Random Forest, Streamlit, Real-Time Processing, Safety Monitoring, Predictive Maintenance
+** Keywords:** Python, Machine Learning, AI, Multi-Agent Systems, IoT, Random Forest, Streamlit, Real-Time Processing, Safety Monitoring, Predictive Maintenance
