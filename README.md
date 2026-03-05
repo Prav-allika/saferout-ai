@@ -11,7 +11,7 @@ An intelligent multi-agent AI system that predicts vehicle failures, analyzes ro
 
 SafeRoute AI is a production-grade vehicle safety monitoring system built with **Python, Machine Learning, and Multi-Agent Architecture**. The system analyzes real-time sensor data (tire pressure, engine temperature, road conditions, weather) to predict failures **before they happen** and automatically execute emergency protocols.
 
-### ⚡ Key Highlights
+###  Key Highlights
 
 - ** 3 Specialized AI Agents** coordinated by a master orchestrator
 - ** ML-Powered Predictions** using Random Forest (99.8% accuracy)
@@ -46,7 +46,7 @@ SafeRoute AI is a production-grade vehicle safety monitoring system built with *
 
 ---
 
-## 🚀 Features
+##  Features
 
 ### 1️ **Tire Failure Predictor Agent**
 - Random Forest ML model trained on 10,000 synthetic examples
@@ -137,7 +137,7 @@ saferout-ai/
 
 ---
 
-## ⚡ Quick Start
+##  Quick Start
 
 ### **1. Clone Repository**
 ```bash
