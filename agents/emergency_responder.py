@@ -4,6 +4,7 @@ Handles critical situations and executes emergency protocols
 """
 
 from typing import Dict, List
+from collections import deque
 from datetime import datetime  # timestamp emergency events
 
 
@@ -11,7 +12,7 @@ class EmergencyResponderAgent:
     """Agent that handles critical emergencies"""
 
     def __init__(self):
-        self.emergency_history = []
+        self.emergency_history = deque(maxlen=500)  # Bounded: prevents memory leak
         self.total_emergencies = 0
 
     def handle_emergency(self, alert: Dict, vehicle_data: Dict) -> Dict:

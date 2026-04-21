@@ -1,22 +1,21 @@
-# SafeRoute AI - Dependencies
-
-# Core
-numpy>=1.21.0
-pandas>=1.3.0
-
-# Machine Learning
-scikit-learn>=1.0.0
-
-# Data Validation
-pydantic>=1.8.0
+# SafeRoute AI - Requirements for HuggingFace Spaces
+# Install these packages for deployment
 
 # Web Framework
-streamlit>=1.10.0
+streamlit==1.31.0
 
-# Utilities
-python-dateutil>=2.8.0
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
 
-# Optional (for future enhancements)
-# requests>=2.26.0  # For API integration
-# twilio>=7.0.0  # For SMS notifications
-# pytest>=7.0.0  # For testing
+# Machine Learning
+scikit-learn>=1.3.0
+
+# Data Validation
+pydantic>=2.0.0
+
+# Visualization
+plotly>=5.18.0
+
+# Python Standard Library (already included)
+# datetime, time, sys, oss

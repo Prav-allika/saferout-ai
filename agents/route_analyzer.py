@@ -4,6 +4,7 @@ Analyzes route safety based on weather and road conditions
 """
 
 from typing import Dict, List
+from collections import deque
 from simulation.environment import WeatherSimulator, RoadDatabase
 
 
@@ -12,7 +13,7 @@ class RouteAnalyzerAgent:
 
     def __init__(self):
         self.analyses_performed = 0  # counter
-        self.route_history = []  # list of past analyses
+        self.route_history = deque(maxlen=500)  # Bounded: prevents memory leak
 
     def analyze_route(self, route_info: Dict) -> Dict:
         """

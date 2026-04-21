@@ -5,16 +5,21 @@ Coordinates all specialized agents: Tire Predictor, Emergency Responder, Route A
 
 from typing import Dict, List
 from datetime import datetime
+from collections import deque
+from concurrent.futures import ThreadPoolExecutor
 from agents.tire_predictor import TirePredictorAgent  # ML predictions
 from agents.emergency_responder import EmergencyResponderAgent  # Emergency protocols
 from agents.route_analyzer import RouteAnalyzerAgent  # Route safety
+
+# Route cache TTL: refresh analysis after this many ticks (~30 seconds at 1s interval)
+_ROUTE_CACHE_TTL = 30
 
 
 class Orchestrator:
     """Master controller that coordinates all specialized agents"""
 
     def __init__(self):
-        self.alert_history = []  # → Stores all alerts for tracking
+        self.alert_history = deque(maxlen=1000)  # Bounded: prevents memory leak
 
         # Initialize all specialized agents
         self.tire_predictor = TirePredictorAgent()  # → Ready to predict tire failures
@@ -23,6 +28,9 @@ class Orchestrator:
         )  # → Ready to execute emergency protocols
         self.route_analyzer = RouteAnalyzerAgent()  # → Ready to analyze routes
 
+        # Route cache: keyed by "road_name_time_of_day", stores (result, tick_count)
+        self._route_cache: Dict = {}
+
         print("Orchestrator initialized with ALL specialized agents:")
         print("   - Tire Predictor Agent (ML-powered failure prediction)")
         print("   - Emergency Responder Agent (Critical situation handler)")
@@ -30,7 +38,8 @@ class Orchestrator:
 
     def analyze_sensor_data(self, sensor_data: Dict, route_info: Dict = None) -> Dict:
         """
-        Analyze incoming sensor data and coordinate agents
+        Analyze incoming sensor data and coordinate agents.
+        Route analysis, tire checks, and engine checks run in parallel.
 
         Args:
             sensor_data: Vehicle sensor readings
@@ -42,7 +51,6 @@ class Orchestrator:
         vehicle_id = sensor_data["vehicle_id"]
         timestamp = sensor_data["timestamp"]
 
-        # Storage for decisions
         decisions = {
             "vehicle_id": vehicle_id,
             "timestamp": timestamp,
@@ -52,12 +60,40 @@ class Orchestrator:
             "agent_responses": {},
         }
 
-        # 1. ROUTE ANALYSIS (if route provided)
-        if route_info:
-            route_analysis = self.route_analyzer.analyze_route(route_info)
-            decisions["agent_responses"]["route_analyzer"] = route_analysis
+        # 1. RUN ROUTE + TIRE + ENGINE CHECKS IN PARALLEL
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            # Submit tire and engine checks (always run)
+            future_tires = executor.submit(
+                self._check_tires, sensor_data["tires"], sensor_data["metadata"]
+            )
+            future_engine = executor.submit(self._check_engine, sensor_data["engine"])
 
-            # Check if route is high risk
+            # Submit route analysis with caching (only re-run after TTL expires)
+            future_route = None
+            route_key = None
+            if route_info:
+                route_key = f"{route_info.get('road_name')}_{route_info.get('time_of_day')}"
+                cached = self._route_cache.get(route_key)
+                if cached and cached["ticks"] < _ROUTE_CACHE_TTL:
+                    # Use cached result, increment tick counter
+                    self._route_cache[route_key]["ticks"] += 1
+                    route_analysis = cached["result"]
+                else:
+                    # Cache expired or missing — fetch fresh
+                    future_route = executor.submit(
+                        self.route_analyzer.analyze_route, route_info
+                    )
+
+            tire_alerts = future_tires.result()
+            engine_alerts = future_engine.result()
+
+            if future_route is not None:
+                route_analysis = future_route.result()
+                self._route_cache[route_key] = {"result": route_analysis, "ticks": 0}
+
+        # 2. PROCESS ROUTE RESULTS
+        if route_info:
+            decisions["agent_responses"]["route_analyzer"] = route_analysis
             if route_analysis["risk_analysis"]["risk_score"] >= 6.0:
                 decisions["alerts"].append(
                     {
@@ -68,30 +104,26 @@ class Orchestrator:
                     }
                 )
 
-        # 2. TIRE SENSOR ANALYSIS
-        # Call helper function to check all 4 tires:
-
-        tire_alerts = self._check_tires(sensor_data["tires"], sensor_data["metadata"])
+        # 3. PROCESS TIRE RESULTS
         if tire_alerts:
             decisions["alerts"].extend(tire_alerts)
             decisions["risk_level"] = self._calculate_risk_level(tire_alerts)
 
-        # 3. ENGINE ANALYSIS
-        engine_alerts = self._check_engine(sensor_data["engine"])
+        # 4. PROCESS ENGINE RESULTS
         if engine_alerts:
             decisions["alerts"].extend(engine_alerts)
-            # Engine issues escalate risk
-            if decisions["risk_level"] == "LOW":
-                decisions["risk_level"] = "MEDIUM"
-            elif decisions["risk_level"] == "MEDIUM":
-                decisions["risk_level"] = "HIGH"
+            engine_risk = self._calculate_risk_level(engine_alerts)
+            _risk_order = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
+            # Take the higher of tire risk and engine risk
+            if _risk_order[engine_risk] > _risk_order[decisions["risk_level"]]:
+                decisions["risk_level"] = engine_risk
 
-        # 4. ROUTE TO SPECIALIZED AGENTS BASED ON RISK
+        # 5. ROUTE TO SPECIALIZED AGENTS BASED ON RISK
         if decisions["risk_level"] == "HIGH":
             # CRITICAL - Activate Emergency Responder
             emergency_response = self.emergency_responder.handle_emergency(
                 decisions["alerts"][0],
-                sensor_data,  # First CRITICAL alert
+                sensor_data,
             )
             decisions["agent_responses"]["emergency_responder"] = emergency_response
             decisions["actions"] = [
@@ -101,31 +133,25 @@ class Orchestrator:
         elif decisions["risk_level"] == "MEDIUM":
             # WARNING - Get ML prediction from Tire Predictor
             for alert in decisions["alerts"]:
-                if "TIRE" in alert.get("type", ""):  # Found tire alert!
-                    tire_position = alert["position"]  # "front_left"
+                if "TIRE" in alert.get("type", ""):
+                    tire_position = alert["position"]
                     tire_data = sensor_data["tires"][tire_position]
-
                     prediction = self.tire_predictor.analyze(
                         tire_data, sensor_data["metadata"]
                     )
                     decisions["agent_responses"]["tire_predictor"] = prediction
-
-                    # Add ML prediction to actions
                     ml_rec = prediction["ml_prediction"]["recommendation"]
                     decisions["actions"].append(f"ML_PREDICTION: {ml_rec}")
-                    # decisions["actions"] = ["ML_PREDICTION: SERVICE_TODAY"]
                     break
 
-            # Add standard warning actions
             decisions["actions"].extend(
                 ["SEND_WARNING_SMS", "SCHEDULE_SERVICE", "LOG_WARNING"]
             )
 
         else:
-            # LOW risk - Just log
             decisions["actions"] = ["LOG_NORMAL"]
 
-        # 5. COMBINE ROUTE RISK WITH VEHICLE RISK
+        # 6. COMBINE ROUTE RISK WITH VEHICLE RISK
         if route_info and "route_analyzer" in decisions["agent_responses"]:
             route_risk = decisions["agent_responses"]["route_analyzer"][
                 "risk_analysis"
@@ -133,7 +159,6 @@ class Orchestrator:
             if route_risk >= 8.0 and decisions["risk_level"] != "HIGH":
                 decisions["actions"].append("ROUTE_WARNING: Extreme route conditions")
 
-        # Log alert
         if decisions["alerts"]:
             self.alert_history.append(decisions)
 

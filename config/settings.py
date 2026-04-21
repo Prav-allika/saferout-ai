@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     )
 
     # Agent Settings (can be overridden with environment variables)
-    ORCHESTRATOR_MODEL: str = os.getenv("LLM_MODEL", "llama3.1:70b")
+    ORCHESTRATOR_MODEL: str = os.getenv("LLM_MODEL", "llama3.3:70b")
     AGENT_TEMPERATURE: float = float(os.getenv("AGENT_TEMP", "0.0"))
 
     # Normal ranges (based on real sensor specs)

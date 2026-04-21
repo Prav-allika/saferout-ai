@@ -1,0 +1,62 @@
+# SafeRoute AI - .gitignore
+# Excludes unnecessary files from Git/GitHub
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+saferout/
+lib/
+bin/
+include/
+share/
+pyvenv.cfg
+
+# Streamlit cache
+.streamlit/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+.env.local
+
+# Model files (if they're large)
+# *.pkl
+# *.joblib
+
+# Data files (if large)
+# data/raw/
+# data/processed/
