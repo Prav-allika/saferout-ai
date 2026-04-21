@@ -1,3 +1,14 @@
+---
+title: SafeRoute AI
+emoji: S
+colorFrom: blue
+colorTo: pink
+sdk: streamlit
+sdk_version: 1.28.0
+app_file: ui/dashboard.py
+pinned: false
+---
+
 **Live Demo:** https://huggingface.co/spaces/Prav04/saferout-ai
 
 # SafeRoute AI — Multi-Agent Vehicle Safety Monitoring System
