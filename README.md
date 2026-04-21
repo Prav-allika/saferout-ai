@@ -1,6 +1,6 @@
 ---
 title: SafeRoute AI
-emoji: S
+emoji: 🚗
 colorFrom: blue
 colorTo: pink
 sdk: streamlit
